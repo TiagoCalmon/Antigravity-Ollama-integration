@@ -1,4 +1,4 @@
-﻿# Antigravity Local-LLM-First Optimizer (`antigravity-optimizer`)
+# Antigravity Local-LLM-First Optimizer (`Antigravity-Ollama-integration`)
 
 Configures **Google Antigravity** (IDE, 2.0 App, and CLI) to prioritize a local GPU-accelerated **Ollama** installation across **all existing and future projects** on a machine.
 
@@ -12,21 +12,22 @@ When installed globally via [`scripts/install-global.ps1`](./scripts/install-glo
 
 ```text
 ~/.gemini/
-â”œâ”€â”€ GEMINI.md                                      # Layer 1: Global Always-On Rule (All Workspaces)
-â””â”€â”€ config/
-    â””â”€â”€ plugins/
-        â””â”€â”€ local-ollama/                          # Layer 2: Global Native Antigravity Plugin
-            â”œâ”€â”€ plugin.json                        # Plugin Manifest
-            â”œâ”€â”€ mcp_config.json                    # Layer 3: Global MCP Server Registration
-            â”œâ”€â”€ rules/
-            â”‚   â””â”€â”€ AGENTS.md                      # Plugin-Scoped Always-On Priority Rule
-            â”œâ”€â”€ skills/
-            â”‚   â””â”€â”€ local-llm-router/
-            â”‚       â”œâ”€â”€ SKILL.md                   # Layer 4: On-Demand Routing Skill
-            â”‚       â””â”€â”€ scripts/
-            â”‚           â””â”€â”€ invoke-ollama.ps1      # PowerShell Router with Live GPU Telemetry
-            â””â”€â”€ tools/
-                â””â”€â”€ ollama-mcp-server.mjs          # Zero-Dependency Node.js Stdio MCP Server
+├── GEMINI.md                                      # Layer 1: Global Always-On Rule (All Workspaces)
+└── config/
+    └── plugins/
+        └── local-ollama/                          # Layer 2: Global Native Antigravity Plugin
+            ├── plugin.json                        # Plugin Manifest
+            ├── mcp_config.json                    # Layer 3: Global MCP Server Registration
+            ├── rules/
+            │   └── AGENTS.md                      # Plugin-Scoped Always-On Priority Rule
+            ├── skills/
+            │   └── local-llm-router/
+            │       ├── SKILL.md                   # Layer 4: On-Demand Routing Skill
+            │       └── scripts/
+            │           ├── invoke-ollama.ps1      # PowerShell Router with Live GPU Telemetry
+            │           └── show-token-usage.ps1   # Cumulative Token Usage Dashboard
+            └── tools/
+                └── ollama-mcp-server.mjs          # Zero-Dependency Node.js Stdio MCP Server
 ```
 
 ### Hardware-Aware Model Routing Table
@@ -87,10 +88,11 @@ powershell -ExecutionPolicy Bypass -File "$HOME\.gemini\config\plugins\local-oll
 Expected output:
 ```text
 === LOCAL OLLAMA TELEMETRY ===
-Model         : qwen2.5-coder:7b-instruct-q3_K_M
-Task Profile  : code (num_ctx=4096)
-VRAM Offload  : 100% GPU (3843083467 / 3843083467 bytes)
-Eval Speed    : 27.58 tokens/sec (108 tokens)
+Model            : qwen2.5-coder:7b-instruct-q3_K_M
+Task Profile     : code (num_ctx=4096)
+VRAM Offload     : 100% GPU (3843083467 / 3843083467 bytes)
+Call Tokens      : 32 prompt + 108 completion = 140 total (27.58 tok/s)
+Cumulative Usage : 140 tokens across 1 requests
 === RESPONSE ===
 ...
 ```
@@ -124,5 +126,5 @@ If the target machine has a different GPU VRAM budget, edit the `TASK_MODELS` ma
 
 * **4 GB VRAM GPUs:** Use `qwen2.5-coder:3b` (`1.9 GB`) for `code` and `qwen3:4b` (`2.6 GB`) for `general`.
 * **6 GB VRAM GPUs (Default):** Use `qwen2.5-coder:7b-instruct-q3_K_M` (`3.8 GB`) for 100% GPU coding, `gemma4:e4b` for general, and `gemma4:26b` (with 32 GB system RAM) for deep reasoning.
-* **8 GBâ€“12 GB VRAM GPUs:** Upgrade `code` to `qwen2.5-coder:7b` (`Q4_K_M`, `4.7 GB`) or `qwen2.5-coder:14b-instruct-q3_K_M`.
-* **16 GBâ€“24 GB+ VRAM GPUs:** Upgrade `code` to `qwen2.5-coder:14b` or `qwen2.5-coder:32b`, and run `gemma4:26b` 100% inside GPU VRAM.
+* **8 GB-12 GB VRAM GPUs:** Upgrade `code` to `qwen2.5-coder:7b` (`Q4_K_M`, `4.7 GB`) or `qwen2.5-coder:14b-instruct-q3_K_M`.
+* **16 GB-24 GB+ VRAM GPUs:** Upgrade `code` to `qwen2.5-coder:14b` or `qwen2.5-coder:32b`, and run `gemma4:26b` 100% inside GPU VRAM.
