@@ -1,4 +1,4 @@
-# Antigravity Local-LLM-First Optimizer (`antigravity-optimizer`)
+﻿# Antigravity Local-LLM-First Optimizer (`antigravity-optimizer`)
 
 Configures **Google Antigravity** (IDE, 2.0 App, and CLI) to prioritize a local GPU-accelerated **Ollama** installation across **all existing and future projects** on a machine.
 
@@ -12,21 +12,21 @@ When installed globally via [`scripts/install-global.ps1`](./scripts/install-glo
 
 ```text
 ~/.gemini/
-├── GEMINI.md                                      # Layer 1: Global Always-On Rule (All Workspaces)
-└── config/
-    └── plugins/
-        └── local-ollama/                          # Layer 2: Global Native Antigravity Plugin
-            ├── plugin.json                        # Plugin Manifest
-            ├── mcp_config.json                    # Layer 3: Global MCP Server Registration
-            ├── rules/
-            │   └── AGENTS.md                      # Plugin-Scoped Always-On Priority Rule
-            ├── skills/
-            │   └── local-llm-router/
-            │       ├── SKILL.md                   # Layer 4: On-Demand Routing Skill
-            │       └── scripts/
-            │           └── invoke-ollama.ps1      # PowerShell Router with Live GPU Telemetry
-            └── tools/
-                └── ollama-mcp-server.mjs          # Zero-Dependency Node.js Stdio MCP Server
+â”œâ”€â”€ GEMINI.md                                      # Layer 1: Global Always-On Rule (All Workspaces)
+â””â”€â”€ config/
+    â””â”€â”€ plugins/
+        â””â”€â”€ local-ollama/                          # Layer 2: Global Native Antigravity Plugin
+            â”œâ”€â”€ plugin.json                        # Plugin Manifest
+            â”œâ”€â”€ mcp_config.json                    # Layer 3: Global MCP Server Registration
+            â”œâ”€â”€ rules/
+            â”‚   â””â”€â”€ AGENTS.md                      # Plugin-Scoped Always-On Priority Rule
+            â”œâ”€â”€ skills/
+            â”‚   â””â”€â”€ local-llm-router/
+            â”‚       â”œâ”€â”€ SKILL.md                   # Layer 4: On-Demand Routing Skill
+            â”‚       â””â”€â”€ scripts/
+            â”‚           â””â”€â”€ invoke-ollama.ps1      # PowerShell Router with Live GPU Telemetry
+            â””â”€â”€ tools/
+                â””â”€â”€ ollama-mcp-server.mjs          # Zero-Dependency Node.js Stdio MCP Server
 ```
 
 ### Hardware-Aware Model Routing Table
@@ -51,8 +51,8 @@ When installed globally via [`scripts/install-global.ps1`](./scripts/install-glo
 
 ### Step 1: Clone This Repository
 ```powershell
-git clone <your-repo-url> antigravity-optimizer
-cd antigravity-optimizer
+git clone https://github.com/TiagoCalmon/Antigravity-Ollama-integration.git
+cd Antigravity-Ollama-integration
 ```
 
 ### Step 2: Run the One-Command Global Installer
@@ -102,7 +102,16 @@ Test the JSON-RPC MCP server from the terminal:
 '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"ollama_status","arguments":{}}}' | node "$HOME\.gemini\config\plugins\local-ollama\tools\ollama-mcp-server.mjs"
 ```
 
-### C. Verify Inside Antigravity Chat (Any Project)
+### C. View Cumulative Token Usage Across All Projects
+Every call through the MCP server (`ollama_generate`) or the PowerShell router (`invoke-ollama.ps1`) automatically records prompt and completion tokens in `~/.gemini/antigravity/scratch/ollama_usage.json`, broken down by model and by project workspace.
+
+To view the cumulative token dashboard at any time:
+```powershell
+powershell -ExecutionPolicy Bypass -File "$HOME\.gemini\config\plugins\local-ollama\skills\local-llm-router\scripts\show-token-usage.ps1"
+```
+*(Pass `-Reset` to clear the cumulative counter.)*
+
+### D. Verify Inside Antigravity Chat (Any Project)
 Open **any** existing or brand-new project in Antigravity and ask:
 * *"Check local Ollama GPU VRAM status using the MCP tool."*
 * *"Use the local Qwen Coder model to write unit tests for this module."*
@@ -115,5 +124,5 @@ If the target machine has a different GPU VRAM budget, edit the `TASK_MODELS` ma
 
 * **4 GB VRAM GPUs:** Use `qwen2.5-coder:3b` (`1.9 GB`) for `code` and `qwen3:4b` (`2.6 GB`) for `general`.
 * **6 GB VRAM GPUs (Default):** Use `qwen2.5-coder:7b-instruct-q3_K_M` (`3.8 GB`) for 100% GPU coding, `gemma4:e4b` for general, and `gemma4:26b` (with 32 GB system RAM) for deep reasoning.
-* **8 GB–12 GB VRAM GPUs:** Upgrade `code` to `qwen2.5-coder:7b` (`Q4_K_M`, `4.7 GB`) or `qwen2.5-coder:14b-instruct-q3_K_M`.
-* **16 GB–24 GB+ VRAM GPUs:** Upgrade `code` to `qwen2.5-coder:14b` or `qwen2.5-coder:32b`, and run `gemma4:26b` 100% inside GPU VRAM.
+* **8 GBâ€“12 GB VRAM GPUs:** Upgrade `code` to `qwen2.5-coder:7b` (`Q4_K_M`, `4.7 GB`) or `qwen2.5-coder:14b-instruct-q3_K_M`.
+* **16 GBâ€“24 GB+ VRAM GPUs:** Upgrade `code` to `qwen2.5-coder:14b` or `qwen2.5-coder:32b`, and run `gemma4:26b` 100% inside GPU VRAM.
