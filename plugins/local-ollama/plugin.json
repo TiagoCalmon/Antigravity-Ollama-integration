@@ -1,0 +1,12 @@
+{
+  "name": "local-ollama",
+  "displayName": "Local Ollama GPU Router",
+  "description": "Prioritizes local GPU-accelerated Ollama models (qwen2.5-coder:7b-instruct-q3_K_M, gemma4:e4b, gemma4:26b) across all Antigravity workspaces.",
+  "version": "1.0.0",
+  "author": "antigravity-optimizer",
+  "suggestedPrompts": [
+    "Check local Ollama GPU VRAM status and loaded models",
+    "Generate unit tests using the local Qwen 2.5 Coder GPU model",
+    "Run a deep architectural analysis using local Gemma 4 26B MoE"
+  ]
+}

@@ -1,0 +1,8 @@
+# Node / OS artifacts
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# Local temporary or workspace-only agent overrides
+.agents/
